@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin · Manage Projects</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <style>
+        /* ===== ADMIN STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7C3AED;
+            --primary-light: #A78BFA;
+            --primary-dark: #5B21B6;
+            --secondary: #F472B6;
+            --success: #22C55E;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --bg: #0B0F1A;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.8);
+            --radius: 16px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .admin-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .admin-header h1 .highlight {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .admin-header .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-light);
+            color: var(--text-primary);
+            background: rgba(124, 58, 237, 0.08);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #fff;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .stat-card .label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .file-status {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .file-status .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .file-status .info .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .file-status .info .status-dot.loaded { background: var(--success); }
+        .file-status .info .status-dot.not-loaded { background: var(--warning); }
+        .file-status .info .status-dot.error { background: var(--danger); }
+
+        .form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-card.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group select option {
+            background: var(--bg);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            grid-column: 1 / -1;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .tech-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(124, 58, 237, 0.12);
+            color: var(--primary-light);
+            padding: 2px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            border: 1px solid rgba(124, 58, 237, 0.15);
+        }
+
+        .tech-tag .remove-tech {
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .tech-tag .remove-tech:hover {
+            color: var(--danger);
+        }
+
+        .add-tech-input {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .add-tech-input input {
+            flex: 1;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .add-tech-input input:focus {
+            border-color: var(--primary-light);
+        }
+
+        .add-tech-input button {
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: none;
+            background: var(--primary);
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .add-tech-input button:hover {
+            background: var(--primary-dark);
+        }
+
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 18px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        td .title-cell {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        td .category-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .category-badge.mobile { background: rgba(124, 58, 237, 0.15); color: var(--primary-light); }
+        .category-badge.webapp { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+        .category-badge.website { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .category-badge.desktop { background: rgba(244, 114, 182, 0.15); color: var(--secondary); }
+
+        td .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            max-width: 250px;
+        }
+
+        td .tech-list span {
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 1px 8px;
+            border-radius: 100px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            border-color: var(--primary-light);
+            color: var(--text-primary);
+        }
+
+        .btn-icon.edit:hover {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .btn-icon.delete:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: var(--radius);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        .toast.warning { border-color: var(--warning); }
+
+        .toast .toast-icon {
+            margin-right: 10px;
+        }
+
+        .link-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .link-group .form-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .admin-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .admin-header .actions { justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            table { font-size: 12px; }
+            th, td { padding: 10px 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .admin-header h1 { font-size: 22px; }
+            .btn { font-size: 12px; padding: 8px 16px; }
+            .file-status { flex-direction: column; align-items: stretch; text-align: center; }
+            .link-group { flex-direction: column; }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div>
+                <h1>📂 <span class="highlight">Project Manager</span></h1>
+                <p style="color:var(--text-muted);font-size:14px;">Direct JSON file editor</p>
+            </div>
+            <div class="actions">
+                <a href="../index.html" class="btn btn-outline" target="_blank">
+                    <i class="fas fa-eye"></i> View Portfolio
+                </a>
+                <button class="btn btn-primary" onclick="showAddForm()">
+                    <i class="fas fa-plus"></i> Add Project
+                </button>
+                <button class="btn btn-success" onclick="saveToFile()">
+                    <i class="fas fa-save"></i> Save to File
+                </button>
+                <button class="btn btn-warning" onclick="loadFromFile()">
+                    <i class="fas fa-folder-open"></i> Load File
+                </button>
+            </div>
+        </header>
+
+        <!-- File Status -->
+        <div class="file-status">
+            <div class="info">
+                <span class="status-dot not-loaded" id="statusDot"></span>
+                <span id="fileStatusText">📄 No file loaded</span>
+            </div>
+            <div>
+                <span style="color:var(--text-muted);font-size:12px;">
+                    <i class="fas fa-info-circle"></i> Load a JSON file to edit
+                </span>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="number" id="totalProjects">0</div>
+                <div class="label">Total Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="mobileCount">0</div>
+                <div class="label">Mobile Apps</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="webappCount">0</div>
+                <div class="label">Web Apps</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="websiteCount">0</div>
+                <div class="label">Websites</div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-card" id="formCard">
+            <h3 id="formTitle">Add New Project</h3>
+            <form id="projectForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="projectId">ID (auto)</label>
+                        <input type="number" id="projectId" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="projectCategory">Category *</label>
+                        <select id="projectCategory" required>
+                            <option value="mobile">Mobile App</option>
+                            <option value="webapp">Web App</option>
+                            <option value="website">Website</option>
+                            <option value="desktop">Desktop App</option>
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label for="projectTitle">Title *</label>
+                        <input type="text" id="projectTitle" placeholder="Project Name" required />
+                    </div>
+                    <div class="form-group full">
+                        <label for="projectDesc">Description *</label>
+                        <textarea id="projectDesc" placeholder="Brief description of the project" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTag">Tag *</label>
+                        <input type="text" id="projectTag" placeholder="e.g., Mobile App, Web App" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="projectImage">Image Path *</label>
+                        <input type="text" id="projectImage" placeholder="assets/img/work/project.png" required />
+                    </div>
+                    <div class="form-group full">
+                        <label for="projectLink">Main Project Link *</label>
+                        <input type="url" id="projectLink" placeholder="https://github.com/username/repo" required />
+                    </div>
+
+                    <!-- Technologies -->
+                    <div class="form-group full">
+                        <label>Technologies</label>
+                        <div id="techContainer">
+                            <div class="tech-tags" id="techTags"></div>
+                            <div class="add-tech-input">
+                                <input type="text" id="techInput" placeholder="Add technology (e.g., Flutter, Node.js)" />
+                                <button type="button" onclick="addTechnology()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Links -->
+                    <div class="form-group full">
+                        <label>Additional Links</label>
+                        <div class="link-group">
+                            <div class="form-group">
+                                <label style="font-size:11px;color:var(--text-muted);">Frontend GitHub</label>
+                                <input type="url" id="githubFrontend" placeholder="https://github.com/..." />
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:11px;color:var(--text-muted);">Backend GitHub</label>
+                                <input type="url" id="githubBackend" placeholder="https://github.com/..." />
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size:11px;color:var(--text-muted);">Live Demo</label>
+                                <input type="url" id="liveDemo" placeholder="https://..." />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-save"></i> Save Project
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="cancelForm()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50px;">ID</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Tech</th>
+                        <th style="width:100px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="projectsTableBody">
+                    <!-- Projects will be rendered here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" style="text-align:center;padding:60px 20px;color:var(--text-muted);display:none;">
+            <i class="fas fa-folder-open" style="font-size:48px;color:var(--text-muted);"></i>
+            <h3 style="margin:16px 0 8px;">No Projects Loaded</h3>
+            <p>Click "Load File" to open your projects.json file.</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon"><i class="fas fa-check-circle"></i></span>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <script>
+        // =============================================
+        // ADMIN - DIRECT JSON FILE EDITING
+        // =============================================
+
+        let projects = [];
+        let editingId = null;
+        let nextId = 1;
+        let techList = [];
+        let fileHandle = null;
+
+        // ----- LOAD FILE -----
+        async function loadFromFile() {
+            try {
+                // Check if File System Access API is supported
+                if (!('showOpenFilePicker' in window)) {
+                    showToast('File System Access API not supported. Use Chrome or Edge.', 'error');
+                    // Fallback: use input file
+                    document.getElementById('fileInput').click();
+                    return;
+                }
+
+                const [handle] = await window.showOpenFilePicker({
+                    types: [{
+                        description: 'JSON Files',
+                        accept: { 'application/json': ['.json'] }
+                    }],
+                    multiple: false
+                });
+
+                if (handle) {
+                    fileHandle = handle;
+                    const file = await handle.getFile();
+                    const contents = await file.text();
+                    const data = JSON.parse(contents);
+                    
+                    if (Array.isArray(data)) {
+                        projects = data.map(p => ({
+                            ...p,
+                            technologies: p.technologies || []
+                        }));
+                        nextId = projects.reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
+                        renderTable();
+                        updateStats();
+                        updateFileStatus('✅ File loaded: ' + file.name, 'loaded');
+                        showToast('File loaded successfully!', 'success');
+                    } else {
+                        showToast('Invalid JSON format. Expected an array.', 'error');
+                        updateFileStatus('❌ Invalid JSON format', 'error');
+                    }
+                }
+            } catch (error) {
+                if (error.name !== 'AbortError' && error.name !== 'UserAbortError') {
+                    console.error('Error loading file:', error);
+                    showToast('Error loading file: ' + error.message, 'error');
+                }
+            }
+        }
+
+        // ----- SAVE TO FILE -----
+        async function saveToFile() {
+            if (!projects || projects.length === 0) {
+                showToast('No projects to save!', 'warning');
+                return;
+            }
+
+            try {
+                // If no file handle, ask user to select/create a file
+                if (!fileHandle) {
+                    if (!('showSaveFilePicker' in window)) {
+                        // Fallback: download
+                        downloadJSON();
+                        return;
+                    }
+                    fileHandle = await window.showSaveFilePicker({
+                        suggestedName: 'projects.json',
+                        types: [{
+                            description: 'JSON File',
+                            accept: { 'application/json': ['.json'] }
+                        }]
+                    });
+                }
+
+                const writable = await fileHandle.createWritable();
+                const jsonData = JSON.stringify(projects, null, 4);
+                await writable.write(jsonData);
+                await writable.close();
+
+                updateFileStatus('✅ Saved to file', 'loaded');
+                showToast('Projects saved to file!', 'success');
+            } catch (error) {
+                if (error.name !== 'AbortError' && error.name !== 'UserAbortError') {
+                    console.error('Error saving file:', error);
+                    showToast('Error saving file: ' + error.message, 'error');
+                }
+            }
+        }
+
+        // ----- DOWNLOAD JSON (Fallback) -----
+        function downloadJSON() {
+            if (!projects || projects.length === 0) {
+                showToast('No projects to download!', 'warning');
+                return;
+            }
+
+            const jsonStr = JSON.stringify(projects, null, 4);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'projects.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('JSON downloaded successfully!', 'success');
+        }
+
+        // ----- UPDATE FILE STATUS -----
+        function updateFileStatus(message, status) {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('fileStatusText');
+            statusDot.className = 'status-dot ' + status;
+            statusText.textContent = '📄 ' + message;
+        }
+
+        // ----- TECHNOLOGIES MANAGEMENT -----
+        function addTechnology() {
+            const input = document.getElementById('techInput');
+            const tech = input.value.trim();
+            if (tech && !techList.includes(tech)) {
+                techList.push(tech);
+                renderTechTags();
+                input.value = '';
+            }
+        }
+
+        function removeTechnology(index) {
+            techList.splice(index, 1);
+            renderTechTags();
+        }
+
+        function renderTechTags() {
+            const container = document.getElementById('techTags');
+            container.innerHTML = techList.map((tech, index) => `
+                <span class="tech-tag">
+                    ${tech}
+                    <span class="remove-tech" onclick="removeTechnology(${index})">×</span>
+                </span>
+            `).join('');
+        }
+
+        // ----- RENDER TABLE -----
+        function renderTable() {
+            const tbody = document.getElementById('projectsTableBody');
+            const emptyState = document.getElementById('emptyState');
+
+            if (!projects || projects.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = projects.map(p => `
+                <tr>
+                    <td><span style="color:var(--text-muted);">#${p.id}</span></td>
+                    <td class="title-cell">${p.title}</td>
+                    <td><span class="category-badge ${p.category}">${p.category}</span></td>
+                    <td>
+                        <div class="tech-list">
+                            ${p.technologies && p.technologies.length > 0 
+                                ? p.technologies.slice(0, 3).map(t => `<span>${t}</span>`).join('') 
+                                + (p.technologies.length > 3 ? `<span>+${p.technologies.length - 3}</span>` : '')
+                                : '<span style="color:var(--text-muted);">No tech</span>'
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon edit" onclick="editProject(${p.id})" title="Edit">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button class="btn-icon delete" onclick="deleteProject(${p.id})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ----- UPDATE STATS -----
+        function updateStats() {
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('mobileCount').textContent = projects.filter(p => p.category === 'mobile').length;
+            document.getElementById('webappCount').textContent = projects.filter(p => p.category === 'webapp').length;
+            document.getElementById('websiteCount').textContent = projects.filter(p => p.category === 'website').length;
+        }
+
+        // ----- SHOW ADD FORM -----
+        function showAddForm() {
+            editingId = null;
+            techList = [];
+            document.getElementById('formTitle').textContent = 'Add New Project';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Save Project';
+            document.getElementById('projectForm').reset();
+            document.getElementById('projectId').value = nextId;
+            document.getElementById('githubFrontend').value = '';
+            document.getElementById('githubBackend').value = '';
+            document.getElementById('liveDemo').value = '';
+            renderTechTags();
+            document.getElementById('formCard').classList.add('active');
+            document.getElementById('formCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ----- CANCEL FORM -----
+        function cancelForm() {
+            document.getElementById('formCard').classList.remove('active');
+            editingId = null;
+            techList = [];
+        }
+
+        // ----- EDIT PROJECT -----
+        function editProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            editingId = id;
+            techList = [...(project.technologies || [])];
+            document.getElementById('formTitle').textContent = 'Edit Project';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Update Project';
+            document.getElementById('projectId').value = project.id;
+            document.getElementById('projectCategory').value = project.category;
+            document.getElementById('projectTitle').value = project.title;
+            document.getElementById('projectDesc').value = project.desc;
+            document.getElementById('projectTag').value = project.tag;
+            document.getElementById('projectImage').value = project.image;
+            document.getElementById('projectLink').value = project.link;
+            document.getElementById('githubFrontend').value = project.github_frontend || '';
+            document.getElementById('githubBackend').value = project.github_backend || '';
+            document.getElementById('liveDemo').value = project.live_demo || '';
+            renderTechTags();
+            document.getElementById('formCard').classList.add('active');
+            document.getElementById('formCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ----- DELETE PROJECT -----
+        function deleteProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            if (confirm(`Are you sure you want to delete "${project.title}"?`)) {
+                projects = projects.filter(p => p.id !== id);
+                renderTable();
+                updateStats();
+                showToast(`"${project.title}" deleted successfully!`, 'warning');
+                // Auto-save to file
+                if (fileHandle) {
+                    saveToFile();
+                }
+            }
+        }
+
+        // ----- FORM SUBMIT -----
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const id = parseInt(document.getElementById('projectId').value) || nextId;
+            const category = document.getElementById('projectCategory').value;
+            const title = document.getElementById('projectTitle').value.trim();
+            const desc = document.getElementById('projectDesc').value.trim();
+            const tag = document.getElementById('projectTag').value.trim();
+            const image = document.getElementById('projectImage').value.trim();
+            const link = document.getElementById('projectLink').value.trim();
+            const githubFrontend = document.getElementById('githubFrontend').value.trim();
+            const githubBackend = document.getElementById('githubBackend').value.trim();
+            const liveDemo = document.getElementById('liveDemo').value.trim();
+
+            if (!title || !desc || !tag || !image || !link) {
+                showToast('Please fill in all required fields.', 'error');
+                return;
+            }
+
+            const projectData = {
+                id,
+                category,
+                title,
+                desc,
+                tag,
+                image,
+                link,
+                technologies: techList,
+                github_frontend: githubFrontend,
+                github_backend: githubBackend,
+                live_demo: liveDemo
+            };
+
+            if (editingId) {
+                const index = projects.findIndex(p => p.id === editingId);
+                if (index !== -1) {
+                    projects[index] = projectData;
+                    showToast('Project updated successfully!', 'success');
+                }
+            } else {
+                projects.push(projectData);
+                nextId++;
+                showToast('Project added successfully!', 'success');
+            }
+
+            renderTable();
+            updateStats();
+            cancelForm();
+
+            // Auto-save to file if file is loaded
+            if (fileHandle) {
+                saveToFile();
+            }
+        });
+
+        // ----- TOAST -----
+        let toastTimeout;
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('.toast-icon i');
+
+            toast.className = 'toast';
+            toast.classList.add(type);
+
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-triangle-exclamation'
+            };
+            icon.className = `fas ${icons[type] || icons.success}`;
+
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ----- INIT -----
+        // No hardcoded data - start empty
+        projects = [];
+        renderTable();
+        updateStats();
+        updateFileStatus('📄 Load a JSON file to start editing', 'not-loaded');
+
+        // Check for File System Access API support
+        if (!('showOpenFilePicker' in window)) {
+            console.warn('File System Access API not supported. Use Chrome or Edge for direct file editing.');
+            // Add fallback file input
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.json';
+            fileInput.style.display = 'none';
+            fileInput.id = 'fileInput';
+            fileInput.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        if (Array.isArray(data)) {
+                            projects = data.map(p => ({ ...p, technologies: p.technologies || [] }));
+                            nextId = projects.reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
+                            renderTable();
+                            updateStats();
+                            updateFileStatus('✅ File loaded: ' + file.name, 'loaded');
+                            showToast('File loaded successfully!', 'success');
+                            // Store file reference for saving
+                            window._loadedFile = file;
+                        }
+                    } catch (error) {
+                        showToast('Error parsing JSON: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            document.body.appendChild(fileInput);
+            
+            // Override loadFromFile for unsupported browsers
+            window.loadFromFile = function() {
+                document.getElementById('fileInput').click();
+            };
+            
+            // Override saveToFile for unsupported browsers
+            window.saveToFile = function() {
+                downloadJSON();
+            };
+        }
+
+        console.log('✅ Admin panel loaded - No hardcoded data');
+        console.log('💡 Click "Load File" to open your projects.json');
+        console.log('💡 Click "Save to File" to save changes');
+    </script>
+
+</body>
+</html>

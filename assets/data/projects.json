@@ -1,0 +1,231 @@
+[
+    {
+        "id": 1,
+        "category": "mobile",
+        "title": "Lovebirds Dating App",
+        "desc": "Flutter, Node.js, MySQL — real-time messaging & push notifications.",
+        "tag": "Mobile App",
+        "image": "assets/img/work/lovebirds-dating-app.png",
+        "link": "https://github.com/malitha23/DatingAppFlutter.git",
+        "technologies": [
+            "Frontend: Flutter, Dart",
+            "Backend: Node.js",
+            "Database: MySQL",
+            "Real-time Messaging: WebSockets",
+            "Notifications: Push Notifications"
+        ],
+        "github_frontend": "https://github.com/malitha23/DatingAppFlutter.git",
+        "github_backend": "https://github.com/malitha23/DatingAppFlutter-Backend.git",
+        "live_demo": ""
+    },
+    {
+        "id": 2,
+        "category": "mobile",
+        "title": "CODY ZEA Projects Planning App",
+        "desc": "Flutter, Node.js, MySQL — task & project management with real-time notifications.",
+        "tag": "Mobile App",
+        "image": "assets/img/work/cody-zea-projects-planning-app.png",
+        "link": "https://github.com/malitha23/codyzea_main_app.git",
+        "technologies": [
+            "Frontend: Flutter, Dart",
+            "Backend: Node.js",
+            "Database: MySQL",
+            "Real-time Notifications",
+            "Task & Project Management Features"
+        ],
+        "github_frontend": "https://github.com/malitha23/codyzea_main_app.git",
+        "github_backend": "",
+        "live_demo": ""
+    },
+    {
+        "id": 3,
+        "category": "mobile",
+        "title": "CropAdvisor Mobile App",
+        "desc": "Flutter, Laravel, MySQL, Python, TensorFlow — ML-powered crop advice.",
+        "tag": "Mobile App",
+        "image": "assets/img/work/work1-1.png",
+        "link": "https://github.com/malitha23/fltter_CropAdvisor_machine_learning.git",
+        "technologies": [
+            "Frontend: Flutter, Dart",
+            "Backend: Laravel, PHP",
+            "Database: MySQL",
+            "Machine Learning: Python, TensorFlow"
+        ],
+        "github_frontend": "https://github.com/malitha23/fltter_CropAdvisor_machine_learning.git",
+        "github_backend": "https://github.com/malitha23/laravel_backend_CropAdvisor_machine_learning.git",
+        "live_demo": ""
+    },
+    {
+        "id": 4,
+        "category": "mobile",
+        "title": "Garbage Cleaning System",
+        "desc": "Flutter, PHP, Laravel, MySQL, Arduino, MQTT — IoT-enabled waste management.",
+        "tag": "Mobile App",
+        "image": "assets/img/work/work1-2.png",
+        "link": "https://github.com/malitha23/Garbage-cleaning-system.git",
+        "technologies": [
+            "Frontend: Flutter, Dart",
+            "Backend: PHP, Laravel",
+            "Database: MySQL",
+            "IoT Integration: Arduino, MQTT"
+        ],
+        "github_frontend": "https://github.com/malitha23/Garbage-cleaning-system.git",
+        "github_backend": "https://github.com/malitha23/Garbage-cleaning-system-backend.git",
+        "live_demo": ""
+    },
+    {
+        "id": 5,
+        "category": "webapp",
+        "title": "Collection App",
+        "desc": "Angular, Laravel, MySQL, Arduino, MQTT — full-stack collection management.",
+        "tag": "Web App",
+        "image": "assets/img/work/work1-3.png",
+        "link": "https://github.com/malitha23/CollectionApp.git",
+        "technologies": [
+            "Frontend: Angular, TypeScript",
+            "Backend: PHP, Laravel",
+            "Database: MySQL",
+            "IoT Integration: Arduino, MQTT"
+        ],
+        "github_frontend": "https://github.com/malitha23/CollectionApp.git",
+        "github_backend": "https://github.com/malitha23/collectionappbackend.git",
+        "live_demo": ""
+    },
+    {
+        "id": 6,
+        "category": "webapp",
+        "title": "Shuttle Service Booking Web App",
+        "desc": "Laravel, MySQL, Stripe — seamless shuttle booking platform.",
+        "tag": "Web App",
+        "image": "assets/img/work/shuttle_project.png",
+        "link": "https://aerolinkshuttle.co.nz/",
+        "technologies": [
+            "Frontend: HTML, CSS, JavaScript",
+            "Backend: PHP, Laravel",
+            "Database: MySQL",
+            "Payment Integration: Stripe"
+        ],
+        "github_frontend": "https://github.com/cody-zea-software-solutions/aerolink.git",
+        "github_backend": "https://github.com/malitha23/ShuttleEaseBackend.git",
+        "live_demo": "https://aerolinkshuttle.co.nz/"
+    },
+    {
+        "id": 7,
+        "category": "webapp",
+        "title": "Quality Application",
+        "desc": "Angular, Laravel, MySQL — quality management with data-driven dashboards.",
+        "tag": "Web App",
+        "image": "assets/img/work/work-quality.png",
+        "link": "https://github.com/malitha23/reimbursement-Frontend.git",
+        "technologies": [
+            "Frontend: Angular, TypeScript",
+            "Backend: PHP, Laravel",
+            "Database: MySQL"
+        ],
+        "github_frontend": "https://github.com/malitha23/reimbursement-Frontend.git",
+        "github_backend": "https://github.com/malitha23/reimbursement-Backend.git",
+        "live_demo": ""
+    },
+    {
+        "id": 8,
+        "category": "webapp",
+        "title": "Dog Skin Disease Diagnosis and Pharmacy Web App",
+        "desc": "Python, Node.js, HTML, JavaScript — ML diagnosis & pharmacy web app.",
+        "tag": "Web App",
+        "image": "assets/img/work/work-dog-skin-disease.png",
+        "link": "https://github.com/malitha23/Dog-Skin-Disease-Diagnosis-and-Pharmacy-Web-App",
+        "technologies": [
+            "Frontend: HTML, JavaScript, CSS",
+            "Backend: Python, Node.js",
+            "Machine Learning: TensorFlow, Keras"
+        ],
+        "github_frontend": "https://github.com/malitha23/Dog-Skin-Disease-Diagnosis-and-Pharmacy-Web-App/tree/199bd512149a9ca01b8cb0a68e62bf8a32530ae4/dogs_skin_disease_web_app",
+        "github_backend": "https://github.com/malitha23/Dog-Skin-Disease-Diagnosis-and-Pharmacy-Web-App/tree/199bd512149a9ca01b8cb0a68e62bf8a32530ae4/dog%20_skin_disease_backend",
+        "live_demo": ""
+    },
+    {
+        "id": 9,
+        "category": "website",
+        "title": "Tourism Website",
+        "desc": "PHP, MySQL — a complete tourism hub built with Blade templates.",
+        "tag": "Website",
+        "image": "assets/img/work/tourglobalwebsite.png",
+        "link": "https://tourglobalhub.com/",
+        "technologies": [
+            "Frontend: PHP, Blade",
+            "Backend: PHP",
+            "Database: MySQL"
+        ],
+        "github_frontend": "",
+        "github_backend": "",
+        "live_demo": "https://tourglobalhub.com/"
+    },
+    {
+        "id": 10,
+        "category": "desktop",
+        "title": "Invoice Link Generation Application",
+        "desc": "C#, MSSQL, Cloud MySQL, PHP — automated invoice link generation system.",
+        "tag": "Desktop App",
+        "image": "assets/img/work/work-invoice-software.png",
+        "link": "https://github.com/malitha23/InvoiceSmsLinkGenerateSystem.git",
+        "technologies": [
+            "Frontend: PHP",
+            "Backend: C#, PHP",
+            "Database: MSSQL, Cloud MySQL"
+        ],
+        "github_frontend": "",
+        "github_backend": "https://github.com/malitha23/InvoiceSmsLinkGenerateSystem.git",
+        "live_demo": ""
+    },
+    {
+        "id": 11,
+        "category": "website",
+        "title": "Dating Website",
+        "desc": "React.js, Laravel, MySQL — modern dating platform with responsive UI.",
+        "tag": "Website",
+        "image": "assets/img/work/datingwebsiteJaffna.png",
+        "link": "https://github.com/malitha23/jaffnamarriageFrontend.git",
+        "technologies": [
+            "Frontend: React.js, JavaScript",
+            "Backend: Laravel, PHP",
+            "Database: MySQL"
+        ],
+        "github_frontend": "https://github.com/malitha23/jaffnamarriageFrontend.git",
+        "github_backend": "https://github.com/malitha23/jaffnamarriageBackend.git",
+        "live_demo": ""
+    },
+    {
+        "id": 12,
+        "category": "website",
+        "title": "Phone Classified Website",
+        "desc": "PHP, HTML, JavaScript, MySQL — classified ads for mobile phones.",
+        "tag": "Website",
+        "image": "assets/img/work/work-phone-classified.png",
+        "link": "https://github.com/malitha23/Durakathanapala.lk.git",
+        "technologies": [
+            "Frontend: HTML, CSS, JavaScript",
+            "Backend: PHP",
+            "Database: MySQL"
+        ],
+        "github_frontend": "https://github.com/malitha23/Durakathanapala.lk.git",
+        "github_backend": "https://github.com/malitha23/Durakathanapala.lk.git",
+        "live_demo": ""
+    },
+    {
+        "id": 13,
+        "category": "mobile",
+        "title": "Monthly Invoices Management App",
+        "desc": "Flutter, MySQL, PHP Backend — manage monthly invoices on the go.",
+        "tag": "Mobile App",
+        "image": "assets/img/work/monthly-invoices-app.png",
+        "link": "https://github.com/malitha23/InvoiceSmsMobileApp.git",
+        "technologies": [
+            "Frontend: Flutter, Dart",
+            "Backend: PHP, Laravel",
+            "Database: MySQL"
+        ],
+        "github_frontend": "https://github.com/malitha23/InvoiceSmsMobileApp.git",
+        "github_backend": "https://github.com/malitha23/InvoiceSmsSystem.git",
+        "live_demo": ""
+    }
+]
