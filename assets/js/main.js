@@ -10,28 +10,31 @@
     async function writeLogFile(type, message, projectName = '', email = '') {
         // --- Try Google Apps Script (serverless) ---
         try {
-            const payload = {
-                type,                // 'visit', 'review', or 'contact'
-                message,
-                projectName,
-                email,
-                url: window.location.href,
-                userAgent: navigator.userAgent,
-                referrer: document.referrer || 'Direct',
-                screen: `${window.screen.width}x${window.screen.height}`,
-                language: navigator.language,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
-            };
 
-            const response = await fetch(
-                'https://script.google.com/macros/s/AKfycbyy-9xVHKEUpCtSjvSDReZfYt7Q_IKc82xI9d534v4huEFDgh7t7WNHpBN2-xCT7qxP/exec',
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                }
-            );
+
+            const formData = new URLSearchParams();
+            formData.append('type', type);
+            formData.append('message', message);
+            formData.append('projectName', projectName || '');
+            formData.append('email', email || '');
+            formData.append('url', window.location.href);
+            formData.append('userAgent', navigator.userAgent);
+            formData.append('referrer', document.referrer || 'Direct');
+            formData.append('screen', `${window.screen.width}x${window.screen.height}`);
+            formData.append('language', navigator.language);
+            formData.append('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone);
+            formData.append('timestamp', new Date().toISOString());
+
+            const response = await fetch('https://script.google.com/macros/s/AKfycbx60Szn7dFtkMClEStIKi_TZjkwp5gsWldWlnMMQBEqsAHSYpKizAyLrmFYFNltpaoA/exec', {
+                method: 'POST',
+                mode: 'no-cors',   // prevents CORS errors – request still goes through
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
+
+            });
+
 
             if (response.ok) {
                 const result = await response.json();
