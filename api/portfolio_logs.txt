@@ -93,3 +93,67 @@ Language   : en-US
 Timezone   : Asia/Colombo
 ========================================
 
+
+========================================
+VISIT
+========================================
+Date       : 2026-08-19 08:34:11
+IP         : ::1
+Location   : unknown
+Email      : N/A
+URL        : http://localhost/my-portfolio-web/
+User Agent : Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36
+Referrer   : Direct
+Screen     : 412x915
+Language   : en-US
+Timezone   : Asia/Colombo
+========================================
+
+
+========================================
+VISIT
+========================================
+Date       : 2026-08-19 08:36:01
+IP         : ::1
+Location   : unknown
+Email      : N/A
+URL        : http://localhost/my-portfolio-web/
+User Agent : Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36
+Referrer   : Direct
+Screen     : 412x915
+Language   : en-US
+Timezone   : Asia/Colombo
+========================================
+
+
+========================================
+VISIT
+========================================
+Date       : 2026-08-19 08:36:43
+IP         : ::1
+Location   : unknown
+Email      : N/A
+URL        : http://localhost/my-portfolio-web/
+User Agent : Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36
+Referrer   : Direct
+Screen     : 412x915
+Language   : en-US
+Timezone   : Asia/Colombo
+========================================
+
+
+========================================
+VISIT
+========================================
+Date       : 2026-08-19 08:36:58
+IP         : ::1
+Location   : unknown
+Email      : N/A
+URL        : http://localhost/my-portfolio-web/
+User Agent : Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36
+Referrer   : Direct
+Screen     : 412x915
+Language   : en-US
+Timezone   : Asia/Colombo
+========================================
+
