@@ -308,23 +308,94 @@
     function setupContactForm() {
         const contactForm = document.getElementById('contactForm');
         const contactStatus = document.getElementById('contactStatus');
-        contactForm.addEventListener('submit', (e) => {
+        const submitBtn = document.getElementById('contactSubmit');
+
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
             const name = document.getElementById('contactName').value.trim();
             const email = document.getElementById('contactEmail').value.trim();
             const message = document.getElementById('contactMessage').value.trim();
+
             if (!name || !email || !message) {
                 contactStatus.textContent = 'Please fill all fields.';
                 contactStatus.style.color = 'var(--secondary)';
                 return;
             }
-            addLogEntry('contact', `Message from ${name} (${email})`);
-            const messages = JSON.parse(localStorage.getItem('contact_messages') || '[]');
-            messages.push({ name, email, message, timestamp: new Date().toISOString() });
-            localStorage.setItem('contact_messages', JSON.stringify(messages));
-            contactStatus.textContent = 'Message sent successfully!';
-            contactStatus.style.color = '#22C55E';
-            contactForm.reset();
+
+            // ==============================
+            // SHOW LOADER
+            // ==============================
+            submitBtn.disabled = true;
+
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = `
+            <i class="fas fa-spinner fa-spin"></i>
+            Sending...
+        `;
+
+            contactStatus.textContent = '';
+
+            try {
+                // Small delay for loader visibility
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                // ==============================
+                // ADD LOG
+                // ==============================
+                addLogEntry(
+                    'contact',
+                    `Message from ${name} (${email}): ${message}`
+                );
+
+                // ==============================
+                // SAVE MESSAGE
+                // ==============================
+                const messages = JSON.parse(
+                    localStorage.getItem('contact_messages') || '[]'
+                );
+
+                messages.push({
+                    name,
+                    email,
+                    message,
+                    timestamp: new Date().toISOString()
+                });
+
+                localStorage.setItem(
+                    'contact_messages',
+                    JSON.stringify(messages)
+                );
+
+                // ==============================
+                // SUCCESS
+                // ==============================
+                contactStatus.textContent =
+                    'Message sent successfully!';
+
+                contactStatus.style.color = '#22C55E';
+
+                contactForm.reset();
+
+            } catch (error) {
+
+                console.error('Contact form error:', error);
+
+                contactStatus.textContent =
+                    'Something went wrong. Please try again.';
+
+                contactStatus.style.color =
+                    'var(--secondary)';
+
+            } finally {
+
+                // ==============================
+                // HIDE LOADER
+                // ==============================
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
         });
     }
 
