@@ -2,9 +2,106 @@
 // 5. PORTFOLIO + REVIEW + LOG SYSTEM
 // =============================================
 (function portfolioAndLog() {
-    const LOG_KEY = 'portfolio_logs';
     const REVIEWS_KEY = 'project_reviews';
     let projects = [];
+    let logFileHandle = null;
+
+    // ----- LOG SYSTEM (File-based) -----
+    async function writeLogFile(type, message, projectName = '', email = '') {
+
+        // 1. Try server-side logging (PHP)
+        try {
+            const payload = {
+                type,
+                message,
+                projectName,
+                email,  // <-- added
+                url: window.location.href,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer || 'Direct',
+                screen: `${window.screen.width}x${window.screen.height}`,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timestamp: new Date().toISOString()
+            };
+
+            const response = await fetch('api/log.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log(`✅ ${type} log sent to server`, result);
+                return; // success – stop here
+            } else {
+                console.warn('Server responded with error, falling back...');
+            }
+        } catch (error) {
+            console.warn('Server logging failed, falling back to file system / localStorage', error);
+        }
+
+    }
+
+
+
+    // ----- Render logs (from localStorage fallback) -----
+    function renderLogs() {
+        const list = document.getElementById('logList');
+        if (!list) return;
+
+        const LOG_KEY = 'portfolio_logs';
+        let logs = [];
+        try {
+            logs = JSON.parse(localStorage.getItem(LOG_KEY)) || [];
+        } catch { logs = []; }
+
+        if (!logs.length) {
+            list.innerHTML =
+                `<div class="log-entry" style="justify-content:center;color:var(--text-muted);padding:12px 0;">No activity yet.</div>`;
+            return;
+        }
+
+        list.innerHTML = logs.map(log => {
+            let iconClass = 'visit',
+                iconSymbol = 'fa-eye';
+            if (log.type === 'review') {
+                iconClass = 'review';
+                iconSymbol = 'fa-star';
+            }
+            if (log.type === 'contact') {
+                iconClass = 'contact';
+                iconSymbol = 'fa-envelope';
+            }
+            let detail = log.message;
+            if (log.projectName) detail = `${log.message} (${log.projectName})`;
+            return `<div class="log-entry">
+                        <span class="log-icon ${iconClass}"><i class="fas ${iconSymbol}"></i></span>
+                        <span>${detail}</span>
+                        <span class="log-time">${log.timestamp}</span>
+                    </div>`;
+        }).join('');
+    }
+
+    // ----- Add log entry (unified) -----
+    function addLogEntry(type, message, projectName = '', email = '') {
+        // Try file-based logging first
+        writeLogFile(type, message, projectName, email);
+
+        // Also store in localStorage for display
+        // const LOG_KEY = 'portfolio_logs';
+        // try {
+        //     const logs = JSON.parse(localStorage.getItem(LOG_KEY)) || [];
+        //     const timestamp = new Date().toLocaleString();
+        //     logs.unshift({ type, message, projectName, timestamp });
+        //     if (logs.length > 50) logs.pop();
+        //     localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+        //     renderLogs();
+        // } catch (e) {
+        //     console.warn('Could not save log to localStorage:', e);
+        // }
+    }
 
     // ----- FETCH PROJECTS FROM JSON -----
     async function fetchProjects() {
@@ -26,45 +123,6 @@
                 </div>
             `;
         }
-    }
-
-    // ----- LOG SYSTEM -----
-    function getLogs() { try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch { return []; } }
-
-    function saveLogs(logs) { localStorage.setItem(LOG_KEY, JSON.stringify(logs)); }
-
-    function addLogEntry(type, message, projectName = '') {
-        const logs = getLogs();
-        const timestamp = new Date().toLocaleString();
-        logs.unshift({ type, message, projectName, timestamp });
-        if (logs.length > 50) logs.pop();
-        saveLogs(logs);
-        renderLogs();
-    }
-
-    function renderLogs() {
-        const list = document.getElementById('logList');
-        const logs = getLogs();
-        if (!logs.length) {
-            list.innerHTML =
-                `<div class="log-entry" style="justify-content:center;color:var(--text-muted);padding:12px 0;">No activity yet.</div>`;
-            return;
-        }
-        list.innerHTML = logs.map(log => {
-            let iconClass = 'visit',
-                iconSymbol = 'fa-eye';
-            if (log.type === 'review') { iconClass = 'review';
-                iconSymbol = 'fa-star'; }
-            if (log.type === 'contact') { iconClass = 'contact';
-                iconSymbol = 'fa-envelope'; }
-            let detail = log.message;
-            if (log.projectName) detail = `${log.message} (${log.projectName})`;
-            return `<div class="log-entry">
-                        <span class="log-icon ${iconClass}"><i class="fas ${iconSymbol}"></i></span>
-                        <span>${detail}</span>
-                        <span class="log-time">${log.timestamp}</span>
-                    </div>`;
-        }).join('');
     }
 
     // ----- RENDER PORTFOLIO (UPDATED WITH ALL FIELDS) -----
@@ -145,13 +203,13 @@
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                
+
                 // Add filtering class for animation
                 grid.classList.add('filtering');
-                
+
                 const filter = btn.dataset.filter;
                 const items = grid.querySelectorAll('.portfolio-item');
-                
+
                 items.forEach((item, index) => {
                     const category = item.dataset.category || 'all';
                     if (filter === 'all' || category === filter) {
@@ -165,7 +223,7 @@
                         item.style.display = 'none';
                     }
                 });
-                
+
                 // Remove filtering class after animation
                 setTimeout(() => {
                     grid.classList.remove('filtering');
@@ -218,8 +276,10 @@
             const projectName = project ? project.title : 'Unknown project';
 
             const reviews = JSON.parse(localStorage.getItem(REVIEWS_KEY) || '[]');
-            reviews.push({ projectId: currentProjectId, projectName, rating: selectedRating, comment,
-                timestamp: new Date().toISOString() });
+            reviews.push({
+                projectId: currentProjectId, projectName, rating: selectedRating, comment,
+                timestamp: new Date().toISOString()
+            });
             localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
 
             addLogEntry('review', `Reviewed "${projectName}" with ${selectedRating}★`, projectName);
@@ -300,13 +360,13 @@
 
     // ----- INIT -----
     // Visit log (once per session)
-    if (!sessionStorage.getItem('visit_logged_final')) {
-        setTimeout(() => {
-            addLogEntry('visit', 'Visited portfolio');
-            sessionStorage.setItem('visit_logged_final', 'true');
-        }, 500);
-    }
-
+    // if (!sessionStorage.getItem('visit_logged_final')) {
+    //     setTimeout(() => {
+    //         addLogEntry('visit', 'Visited portfolio');
+    //         sessionStorage.setItem('visit_logged_final', 'true');
+    //     }, 500);
+    // }
+    addLogEntry('visit', 'Visited portfolio');
     addLinkStyles();
     fetchProjects();
 })();
@@ -334,7 +394,7 @@
 
     function typeEffect() {
         const currentRole = roles[roleIndex];
-        
+
         if (!isDeleting && !isPaused) {
             typingText.textContent = currentRole.substring(0, charIndex + 1);
             charIndex++;
@@ -373,16 +433,16 @@
 // =============================================
 (function animateSkillBars() {
     const skillItems = document.querySelectorAll('.skill-item');
-    
+
     if (!skillItems.length) return;
 
     function animateBar(item) {
         const fill = item.querySelector('.fill');
         if (!fill) return;
-        
+
         const width = parseInt(item.dataset.width) || 0;
         fill.style.width = '0%';
-        
+
         requestAnimationFrame(() => {
             fill.style.transition = 'width 1.5s cubic-bezier(0.22, 1, 0.36, 1)';
             fill.style.width = width + '%';
@@ -406,7 +466,7 @@
 
     skillItems.forEach(item => {
         observer.observe(item);
-        
+
         const rect = item.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
             setTimeout(() => {
@@ -448,7 +508,7 @@
             if (entry.isIntersecting) {
                 const element = entry.target;
                 const delay = parseInt(element.dataset.delay) || 0;
-                
+
                 setTimeout(() => {
                     element.classList.add('visible');
                 }, delay);
@@ -483,7 +543,7 @@
 // =============================================
 (function servicesAnimation() {
     const serviceCards = document.querySelectorAll('.service-card');
-    
+
     if (!serviceCards.length) return;
 
     const observer = new IntersectionObserver((entries) => {
@@ -546,4 +606,42 @@
         }
     `;
     document.head.appendChild(style);
+})();
+
+// =============================================
+// MOBILE HAMBURGER MENU TOGGLE
+// =============================================
+(function mobileMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    if (!hamburger || !navLinks) {
+        console.warn('Mobile menu elements not found.');
+        return;
+    }
+
+    // Toggle menu on hamburger click
+    hamburger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navLinks.classList.toggle('open');   // CSS uses class "open"
+        hamburger.classList.toggle('active'); // for the animated bars
+    });
+
+    // Close menu when a link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('open');
+            hamburger.classList.remove('active');
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function (e) {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+            navLinks.classList.remove('open');
+            hamburger.classList.remove('active');
+        }
+    });
+
+    console.log('✅ Mobile menu initialized');
 })();
