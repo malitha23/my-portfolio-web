@@ -110,6 +110,8 @@
 
     // ----- FETCH PROJECTS FROM JSON -----
     async function fetchProjects() {
+        const loader = document.getElementById('pageLoader');
+        if (loader) loader.classList.remove('hidden');
         try {
             const response = await fetch('assets/data/projects.json');
             if (!response.ok) throw new Error('Failed to load projects');
@@ -127,6 +129,8 @@
                     <p>Failed to load projects. Please try again later.</p>
                 </div>
             `;
+        }finally{
+               if (loader) loader.classList.add('hidden');
         }
     }
 
@@ -436,13 +440,13 @@
 
     // ----- INIT -----
     // Visit log (once per session)
-    // if (!sessionStorage.getItem('visit_logged_final')) {
-    //     setTimeout(() => {
-    //         addLogEntry('visit', 'Visited portfolio');
-    //         sessionStorage.setItem('visit_logged_final', 'true');
-    //     }, 500);
-    // }
-    addLogEntry('visit', 'Visited portfolio');
+    if (!sessionStorage.getItem('visit_logged_final')) {
+        setTimeout(() => {
+            addLogEntry('visit', 'Visited portfolio');
+            sessionStorage.setItem('visit_logged_final', 'true');
+        }, 500);
+    }
+
     addLinkStyles();
     fetchProjects();
 })();

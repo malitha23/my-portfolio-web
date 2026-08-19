@@ -59,19 +59,21 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <title>Malitha Sayuranga · Portfolio</title>
   <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
-
+  <link rel="stylesheet" href="assets/css/style.css" />
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
 <body>
-
+  <!-- ===== PAGE LOADER ===== -->
+  <div id="pageLoader">
+    <div class="loader-spinner"></div>
+    <p>Loading...</p>
+  </div>
   <!-- ===== ANIMATED BACKGROUND SHAPES ===== -->
   <div class="bg-shapes">
     <div class="shape"></div>
@@ -551,7 +553,7 @@
             placeholder="john@example.com" required /></div>
         <div class="form-group"><label for="contactMessage">Message</label><textarea id="contactMessage"
             placeholder="Tell me about your project..." required></textarea></div>
-        <button type="submit" class="submit-btn">Send Message</button>
+        <button type="submit" class="submit-btn" id="contactSubmit">Send Message</button>
         <div id="contactStatus" style="text-align:center;margin-top:16px;color:var(--primary-light);"></div>
       </form>
     </div>
@@ -699,40 +701,7 @@
     })();
   </script>
 
-  <!-- ===== JAVASCRIPT WITH AUTO VERSION ===== -->
-  <script>
-    // Auto-version for JS files
-    (function autoVersion() {
-      const version = Date.now();
-      const scripts = document.querySelectorAll('script[src]');
-
-      scripts.forEach(script => {
-        // Skip external libraries and already versioned
-        if (script.src &&
-          !script.src.includes('cdnjs') &&
-          !script.src.includes('jquery') &&
-          !script.src.includes('fonts.googleapis.com')) {
-          // Only version if not already versioned
-          if (!script.src.includes('?v=')) {
-            script.src = script.src.split('?')[0] + '?v=' + version;
-          }
-        }
-      });
-
-      // Also version CSS links (if not already done)
-      const links = document.querySelectorAll('link[rel="stylesheet"]');
-      links.forEach(link => {
-        if (link.href &&
-          !link.href.includes('fonts.googleapis.com') &&
-          !link.href.includes('cdnjs') &&
-          !link.href.includes('?v=')) {
-          link.href = link.href.split('?')[0] + '?v=' + version;
-        }
-      });
-
-      console.log('🔄 Auto-version applied: v' + version);
-    })();
-  </script>
+ 
 
 </body>
 
