@@ -8,14 +8,13 @@
 
     // ----- LOG SYSTEM (File-based) -----
     async function writeLogFile(type, message, projectName = '', email = '') {
-
-        // 1. Try server-side logging (PHP)
+        // --- Try Google Apps Script (serverless) ---
         try {
             const payload = {
-                type,
+                type,                // 'visit', 'review', or 'contact'
                 message,
                 projectName,
-                email,  // <-- added
+                email,
                 url: window.location.href,
                 userAgent: navigator.userAgent,
                 referrer: document.referrer || 'Direct',
@@ -25,25 +24,28 @@
                 timestamp: new Date().toISOString()
             };
 
-            const response = await fetch('api/log.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            const response = await fetch(
+                'https://script.google.com/macros/s/AKfycbyy-9xVHKEUpCtSjvSDReZfYt7Q_IKc82xI9d534v4huEFDgh7t7WNHpBN2-xCT7qxP/exec',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }
+            );
 
             if (response.ok) {
                 const result = await response.json();
-                console.log(`✅ ${type} log sent to server`, result);
+                console.log(`${type} log sent to Google Apps Script`, result);
                 return; // success – stop here
             } else {
-                console.warn('Server responded with error, falling back...');
+                console.warn('Apps Script responded with error, falling back...');
             }
         } catch (error) {
-            console.warn('Server logging failed, falling back to file system / localStorage', error);
+            console.warn('Apps Script logging failed, falling back to localStorage', error);
         }
 
-    }
 
+    }
 
 
     // ----- Render logs (from localStorage fallback) -----
