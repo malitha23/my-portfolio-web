@@ -1,16 +1,23 @@
 <?php
 // log.php – Accept POST, log IP + location + email
+require __DIR__ . '/src/PHPMailer.php';
+require __DIR__ . '/src/SMTP.php';
+require __DIR__ . '/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); // restrict in production
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Method not allowed']);
-    exit;
-}
+// if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//     http_response_code(405);
+//     echo json_encode(['error' => 'Method not allowed']);
+//     exit;
+// }
 
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
